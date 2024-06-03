@@ -1,0 +1,44 @@
+import matplotlib.pyplot as plt
+
+def mandelbrot(c, max_iter):
+  """
+  Calculates the number of iterations required to determine if a complex number 'c' belongs to the Mandelbrot Set.
+
+  Args:
+      c: The complex number to be evaluated.
+      max_iter: The maximum number of iterations allowed.
+
+  Returns:
+      The number of iterations needed to classify 'c' within the Mandelbrot Set, 
+      or 'max_iter' if the limit is not reached.
+  """
+  z = c
+  for n in range(max_iter):
+    if abs(z) > 2.0:
+      return n
+    z = z * z + c
+  return max_iter
+
+width, height = 300, 300
+x_min, x_max = -2.5, 1.5
+y_min, y_max = -2.0, 2.0
+max_iter = 256
+
+# Create an empty image array
+image = np.zeros((height, width))
+
+# Calculate the number of iterations for each pixel
+for x in range(width):
+  for y in range(height):
+    real = x_min + (x / (width - 1)) * (x_max - x_min)
+    imag = y_min + (y / (height - 1)) * (y_max - y_min)
+    c = complex(real, imag)
+    image[y, x] = mandelbrot(c, max_iter)
+
+# Display the generated fractal image
+plt.imshow(image, extent=(x_min, x_max, y_min, y_max), cmap='hot')
+plt.title('Mandelbrot Set')
+plt.xlabel('Real')
+plt.ylabel('Imaginary')
+plt.axis('off')
+plt.show()
